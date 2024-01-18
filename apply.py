@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
 import os # to get the resume file
 import time # to sleep
 import get_links
@@ -169,7 +170,9 @@ if __name__ == '__main__':
     print(f'Job Listings: {aggregatedURLs}')
     print('\n')
 
-    driver = webdriver.Chrome(executable_path='/usr/local/bin/chromedriver')
+    service = Service('./drivers/chromedriver.exe')
+    driver = webdriver.Chrome(service=service)
+    
     for url in aggregatedURLs:
         print('\n')
 

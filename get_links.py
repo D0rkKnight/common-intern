@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.chrome.service import Service
 
 # to find links
 from bs4 import BeautifulSoup
@@ -14,6 +15,7 @@ import urllib.request
 import re
 
 import time # to sleep
+import yaml
 
 # fill this in with your job preferences!
 PREFERENCES = {
@@ -24,6 +26,13 @@ PREFERENCES = {
 # helper method to give user time to log into glassdoor
 def login(driver):
     driver.get('https://www.glassdoor.com/index.htm')
+    
+    # Retrieve secrets from secrets.yaml
+    with open('secrets.yaml') as f:
+        secrets = yaml.load(f, Loader=yaml.FullLoader)
+    
+    # Log in
+    
 
     # keep waiting for user to log-in until the URL changes to user page
     while True:
@@ -128,7 +137,9 @@ def aggregate_links(driver):
 
 # 'main' method to iterate through all pages and aggregate URLs
 def getURLs():
-    driver = webdriver.Chrome(executable_path='/usr/local/bin/chromedriver')
+    service = Service('./drivers/chromedriver.exe')
+    driver = webdriver.Chrome(service=service)
+    
     success = login(driver)
     if not success:
         # close the page if it gets stuck at some point - this logic can be improved
