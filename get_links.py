@@ -32,6 +32,21 @@ def login(driver):
         secrets = yaml.load(f, Loader=yaml.FullLoader)
     
     # Log in
+    email_input = driver.find_element(By.ID, 'inlineUserEmail')
+    email_input.send_keys(secrets['email'])
+    
+    wait = WebDriverWait(driver, 10)
+    submit_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-test='email-form-button']")))
+    submit_button.click()
+    
+    password_input = driver.find_element(By.ID, 'inlineUserPassword')
+    password_input.send_keys(secrets['password'])
+    
+    # Find password button from parent element
+    password_form = driver.find_element(By.NAME, 'authEmailForm')
+    
+    password_button = password_form.find_element(By.CSS_SELECTOR, "button[class='Button Button']")
+    password_button.click()
     
 
     # keep waiting for user to log-in until the URL changes to user page
